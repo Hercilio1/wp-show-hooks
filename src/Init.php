@@ -12,9 +12,6 @@ namespace WPShowHooks;
  */
 class Init {
 
-	/**
-	 * Init method.
-	 */
-	public static function init() {
+	public static function init() : void {
 	}
 }
