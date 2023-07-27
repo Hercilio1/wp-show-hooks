@@ -1,0 +1,49 @@
+{
+	"name": "wp/wp-show-hooks",
+	"description": "Show all triggered hooks fired on the current WordPress page.",
+	"homepage": "https://github.com/Hercilio1/wp-show-hooks",
+	"authors": [
+		{
+			"name": "Hercilio M. Ortiz",
+			"email": "herciliomartins@gmail.com",
+			"homepage": "https://github.com/Hercilio1"
+		}
+	],
+	"type": "wordpress-plugin",
+	"config": {
+		"sort-packages": true
+	},
+	"support": {
+		"issues": "https://github.com/Hercilio1/wp-show-hooks/issues",
+		"source": "https://github.com/Hercilio1/wp-show-hooks"
+	},
+	"require-dev": {
+		"php": "^7.3 || ^8",
+		"pheromone/phpcs-security-audit": "^2.0",
+		"wp-coding-standards/wpcs": "^2.3",
+		"squizlabs/php_codesniffer": "^3.7"
+	},
+	"autoload": {
+		"psr-4": {
+			"WPShowHooks\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"WPShowHooks\\Tests\\": "test/"
+		}
+	},
+	"scripts": {
+		"fix-style": "phpcbf -p --standard=phpcs.xml.dist seox-plugin-publishers-child.php src/",
+		"check-style": "phpcs -p --standard=phpcs.xml.dist seox-plugin-publishers-child.php src/",
+		"check": [
+			"@fix-style",
+			"@check-style"
+		],
+		"build": [
+			"composer install --no-dev",
+			"wp dist-archive .",
+			"composer install"
+		]
+	}
+}
