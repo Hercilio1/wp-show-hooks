@@ -10,6 +10,7 @@ namespace WPShowHooks\Custom;
 use WPShowHooks\Custom\Crawlers\AbstractHooksCrawler;
 use WPShowHooks\Custom\Crawlers\ActionsCrawler;
 use WPShowHooks\Custom\StatesManager\Crawling;
+use WPShowHooks\Custom\StatesManager\Rendering;
 
 /**
  * Class HooksReader. Hooks all hooks of the system and delegates the right action.
@@ -38,7 +39,9 @@ final class HooksReader {
 
 	private function intercept_hooks() : void {
 		add_action( 'all', [ $this, 'process_hook' ] );
-		add_action( 'shutdown', [ $this, 'tmp_print' ] );
+		// TODO: Remove the following code.
+		add_action( 'wp_head', [ $this, 'tmp_active_rendering' ], PHP_INT_MAX - 2 );
+		// add_action( 'shutdown', [ $this, 'tmp_print' ] );
 	}
 
 	/**
@@ -59,6 +62,12 @@ final class HooksReader {
 	 */
 	public function add_crawler( AbstractHooksCrawler $crawler ) : void {
 		$this->all_crawlers[] = $crawler;
+	}
+
+	public function tmp_active_rendering() : void {
+		foreach ( $this->all_crawlers as $crawler ) {
+			$crawler->set_state( new Rendering() );
+		}
 	}
 
 	public function tmp_print() : void {

@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) or die( 'No Trespassing!' ); // Security
 
 class Another_Show_Hooks {
 	private $status;
@@ -6,6 +7,23 @@ class Another_Show_Hooks {
 	private $recent_hooks = [];
 	private $ignore_hooks = [];
 	private $doing        = 'collect';
+	/**
+	 *  Instantiator
+	 */
+	public static function get_instance() {
+		static $instance = null;
+		if ( null === $instance ) {
+			$instance = new self();
+			$instance->init();
+		}
+		return $instance;
+	}
+
+	/**
+	 * Construct and initialize the main plugin class
+	 */
+
+	public function __construct() {}
 
 	function init() {
 
@@ -21,7 +39,10 @@ class Another_Show_Hooks {
 			// 'gettext',
 			]
 		);
-
+		// Translations
+		add_action( 'plugins_loaded', [ $this, 'load_translation' ] );
+		// Set autive status property.
+		$this->set_active_status();
 		// Attach the hooks as on plugin init.
 		$this->attach_hooks();
 		// Init the plugin.
@@ -29,29 +50,460 @@ class Another_Show_Hooks {
 	}
 
 	/**
+	 * Helper function that sets the active status of the hooks displaying.
+	 */
+	public function set_active_status() {
+		if ( ! isset( $this->status ) ) {
+			if ( ! isset( $_COOKIE['ash_status'] ) ) {
+				try {
+					setcookie( 'ash_status', 'off', time() + 3600 * 24 * 100, '/' );
+				} catch ( Exception $e ) {
+					echo $e->getMessage();
+				}
+			}
+			if ( isset( $_REQUEST['ash-hooks'] ) ) {
+				try {
+					setcookie( 'ash_status', sanitize_text_field( $_REQUEST['ash-hooks'] ), time() + 3600 * 24 * 100, '/' );
+				} catch ( Exception $e ) {
+					echo $e->getMessage();
+				}
+				$this->status = sanitize_text_field( $_REQUEST['ash-hooks'] );
+			} elseif ( isset( $_COOKIE['ash_status'] ) ) {
+				$this->status = sanitize_text_field( $_COOKIE['ash_status'] );
+			} else {
+				$this->status = 'off';
+			}
+		}
+	}
+
+	/**
 	 * Helper function to attach the filter that render all the hook labels.
 	 */
 	public function attach_hooks() {
-		// Status = active (show-action-hooks ou show-filter-hooks):
-		// - Attach HooksCrawler.
-		// - Attach BackDoorSwitchRenderer.
-		// - Attach FiltersRenderer.
+		if ( $this->status == 'show-action-hooks' || $this->status == 'show-filter-hooks' ) {
+			add_filter( 'all', [ $this, 'hook_all_hooks' ], 100 );
+			// add_action( 'shutdown', array( $this, 'notification_switch' ) );
+			add_action( 'wp_footer', [ $this, 'filter_hooks_panel' ] );
+			add_action( 'admin_footer', [ $this, 'filter_hooks_panel' ] );
+		}
 	}
 
 	/**
 	 * Helper function to detach the filter that render all the hook labels.
 	 */
 	public function detach_hooks() {
-		// Status = active (show-action-hooks ou show-filter-hooks):
-		// - Detach HooksCrawler.
-		// - Detach BackDoorSwitchRenderer.
-		// - Detach FiltersRenderer.
+		remove_filter( 'all', [ $this, 'hook_all_hooks' ], 100 );
+		// remove_action( 'shutdown', array( $this, 'notification_switch' ) );
+		remove_action( 'wp_footer', [ $this, 'filter_hooks_panel' ] );
+		remove_action( 'admin_footer', [ $this, 'filter_hooks_panel' ] );
 	}
 
-	public function plugin_active() {
-		// - Enqueue scripts.
-		// - Load Admin Bar.
-		// - Print pre-templates hooks.
-		// -- From now one doing = 'write'.
+
+	/*
+	 * Admin Menu top bar
+	 */
+	function admin_bar_menu( $wp_admin_bar ) {
+		// Suspend the hooks rendering.
+		$this->detach_hooks();
+		// Setup a base URL and clear it of the intial `ash-hooks` arg.
+		$url = remove_query_arg( 'ash-hooks' );
+		if ( 'show-action-hooks' == $this->status ) {
+			$title = __( 'Stop Showing Action Hooks', 'another-show-hooks' );
+			$href  = add_query_arg( 'ash-hooks', 'off', $url );
+			$css   = 'ash-hooks-on ash-hooks-normal';
+		} else {
+			$title = __( 'Show Action Hooks', 'another-show-hooks' );
+			$href  = add_query_arg( 'ash-hooks', 'show-action-hooks', $url );
+			$css   = '';
+		}
+		$menu_title = __( 'Show Hooks', 'another-show-hooks' );
+		if ( ( 'show-action-hooks' == $this->status ) ) {
+			$menu_title = __( 'Stop Showing Action Hooks', 'another-show-hooks' );
+			$href       = add_query_arg( 'ash-hooks', 'off', $url );
+		}
+		if ( ( 'show-filter-hooks' == $this->status ) ) {
+			$menu_title = __( 'Stop Showing Action & Filter Hooks', 'another-show-hooks' );
+			$href       = add_query_arg( 'ash-hooks', 'off', $url );
+		}
+
+		$wp_admin_bar->add_menu(
+			[
+				'title'  => '<span class="ab-icon"></span><span class="ab-label">' . $menu_title . '</span>',
+				'id'     => 'ash-main-menu',
+				'parent' => false,
+				'href'   => $href,
+			]
+		);
+		$wp_admin_bar->add_menu(
+			[
+				'title'  => $title,
+				'id'     => 'ash-simply-show-hooks',
+				'parent' => 'ash-main-menu',
+				'href'   => $href,
+				'meta'   => [ 'class' => $css ],
+			]
+		);
+		if ( $this->status == 'show-filter-hooks' ) {
+			$title = __( 'Stop Showing Action & Filter Hooks', 'another-show-hooks' );
+			$href  = add_query_arg( 'ash-hooks', 'off', $url );
+			$css   = 'ash-hooks-on ash-hooks-sidebar';
+		} else {
+			$title = __( 'Show Act  ion & Filter Hooks', 'another-show-hooks' );
+			$href  = add_query_arg( 'ash-hooks', 'show-filter-hooks', $url );
+			$css   = '';
+		}
+
+		$wp_admin_bar->add_menu(
+			[
+				'title'  => $title,
+				'id'     => 'ash-show-all-hooks',
+				'parent' => 'ash-main-menu',
+				'href'   => $href,
+				'meta'   => [ 'class' => $css ],
+			]
+		);
+		$pro_link = 'https://exlac.com/product/show-hooks-pro/';
+		$title    = __( 'Show Hooks Pro', 'another-show-hooks' );
+		$css      = 'show-hooks-pro-menu-promotion';
+		$wp_admin_bar->add_menu(
+			[
+				'title'  => $title,
+				'id'     => 'ash-show-pro',
+				'parent' => 'ash-main-menu',
+				'href'   => $pro_link,
+				'meta'   => [
+					'class'  => $css,
+					'target' => '_blank',
+				],
+			]
+		);
+		// De-suspend the hooks rendering.
+		$this->attach_hooks();
+	}
+
+	// Custom css to add icon to admin bar edit button.
+	function add_builder_edit_button_css() {
+		?>
+		<style>
+		#wp-admin-bar-ash-main-menu .ab-icon:before{
+			font-family: "dashicons" !important;
+			content: "\f323" !important;
+			font-size: 16px !important;
+		}
+		</style>
+		<?php
+	}
+
+	/*
+	 * Notification Switch
+	 * Displays notification interface that will alway display
+	 * even if the interface is corrupted in other places.
+	 */
+	function notification_switch() {
+		// Suspend the hooks rendering.
+		$this->detach_hooks();
+		// Setup a base URL and clear it of the intial `ash-hooks` arg.
+		$url = add_query_arg( 'ash-hooks', 'off' );
+		?>
+		<a class="ash-notification-switch" href="<?php echo esc_url( $url ); ?>">
+			<span class="ash-notification-indicator"></span>
+			<?php esc_attr_e( 'Stop Showing Hooks', 'another-show-hooks' ); ?>
+		</a>
+		<?php
+		// De-suspend the hooks rendering.
+		$this->attach_hooks();
+	}
+
+	function plugin_init() {
+		if (
+				! current_user_can( 'manage_options' ) || // Restrict use to Admins only
+				! $this->plugin_active() // Allow filters to deactivate.
+			) {
+			$this->status = 'off';
+			return;
+		}
+		// Enqueue Scripts/Styles - in head of admin
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_script' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_script' ] );
+		add_action( 'login_enqueue_scripts', [ $this, 'enqueue_script' ] );
+		// Top Admin Bar
+		add_action( 'admin_bar_menu', [ $this, 'admin_bar_menu' ], 90 );
+		// Top Admin Bar Styles
+		add_action( 'wp_print_styles', [ $this, 'add_builder_edit_button_css' ] );
+		add_action( 'admin_print_styles', [ $this, 'add_builder_edit_button_css' ] );
+		if ( $this->status == 'show-action-hooks' || $this->status == 'show-filter-hooks' ) {
+			// Final hook - render the nested action array
+			add_action( 'admin_head', [ $this, 'render_head_hooks' ], 100 ); // Back-end - Admin
+			add_action( 'wp_head', [ $this, 'render_head_hooks' ], 100 ); // Front-end
+			add_action( 'login_head', [ $this, 'render_head_hooks' ], 100 ); // Login
+			add_action( 'customize_controls_print_scripts', [ $this, 'render_head_hooks' ], 100 ); // Customizer
+		}
+	}
+
+	/**
+	 * Enqueue Scripts
+	 */
+
+	public function enqueue_script( $screen ) {
+		// Main Styles
+		wp_register_style( 'ash-main-css', plugins_url( basename( plugin_dir_path( __FILE__ ) ) . '/assets/css/ash-main.css', basename( __FILE__ ) ), '', '1.1.0', 'screen' );
+		wp_enqueue_style( 'ash-main-css' );
+		// Main Scripts
+		wp_register_script( 'ash-main-js', plugins_url( basename( plugin_dir_path( __FILE__ ) ) . '/assets/js/ash-main.js', basename( __FILE__ ) ), [ 'jquery' ], '1.1.0' );
+		wp_enqueue_script( 'ash-main-js' );
+		wp_localize_script(
+			'ash-main-js',
+			'ash_main_js',
+			[
+				'home_url'  => get_home_url(),
+				'admin_url' => admin_url(),
+				'ajaxurl'   => admin_url( 'admin-ajax.php' ),
+			]
+		);
+	}
+
+	/**
+	 * Localization
+	 */
+	public function load_translation() {
+		load_plugin_textdomain( 'another-show-hooks', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	}
+
+	/**
+	 * Render Head Hooks
+	 */
+	function render_head_hooks() {
+		// Render all the hooks so far
+		$this->render_hooks();
+		// Add header marker to hooks collection
+		// $this->all_hooks[] = array( 'End Header. Start Body', false, 'marker' );
+		// Change to doing 'write' which will write the hook as it happens
+		$this->doing = 'write';
+	}
+
+	/**
+	 * Render all hooks already in the collection
+	 */
+	function render_hooks() {
+		foreach ( $this->all_hooks as $nested_value ) {
+			if ( 'action' == $nested_value['type'] ) {
+				$this->render_action( $nested_value );
+			}
+		}
+	}
+
+	/**
+	 * Hook all hooks
+	 */
+
+	public function hook_all_hooks( $hook ) {
+		global $wp_actions, $wp_filter;
+		if ( ! in_array( $hook, $this->recent_hooks ) ) {
+			if ( isset( $wp_actions[ $hook ] ) ) {
+				// Action
+				$this->all_hooks[] = [
+					'ID'       => $hook,
+					'callback' => false,
+					'type'     => 'action',
+				];
+			} else {
+				// Filter
+				$this->all_hooks[] = [
+					'ID'       => $hook,
+					'callback' => false,
+					'type'     => 'filter',
+				];
+			}
+		}
+		if ( isset( $wp_actions[ $hook ] ) && ! in_array( $hook, $this->recent_hooks ) && ! in_array( $hook, $this->ignore_hooks ) ) {
+			if ( 'write' == $this->doing ) {
+				$this->render_action( end( $this->all_hooks ) );
+			}
+		} else {
+			// s('(skiped-hook!)');
+			// $this->render_action( $hook );
+		}
+		// Discarded functionality: if the hook was
+		// run recently then don't show it again.
+		// Better to use the once run or always run theory.
+		$this->recent_hooks[] = $hook;
+		if ( count( $this->recent_hooks ) > 100 ) {
+			array_shift( $this->recent_hooks );
+		}
+	}
+
+	/**
+	 *
+	 * Render action
+	 */
+	function render_action( $args = [] ) {
+		global $wp_filter;
+		// Get all the nested hooks
+		$nested_hooks = ( isset( $wp_filter[ $args['ID'] ] ) ) ? $wp_filter[ $args['ID'] ] : false;
+		// Count the number of functions on this hook
+		$nested_hooks_count = 0;
+		if ( $nested_hooks ) {
+			foreach ( $nested_hooks as $key => $value ) {
+				$nested_hooks_count += count( $value );
+			}
+		}
+		?>
+		<span style="display:none;" class="ash-hook ash-hook-<?php echo esc_attr( $args['type'] ); ?> <?php echo ( $nested_hooks ) ? esc_html( 'ash-hook-has-hooks' ) : ''; ?>" >
+			<?php
+			if ( 'action' == $args['type'] ) {
+				?>
+				<span class="ash-hook-type ash-hook-type">A</span>
+				<?php
+			} elseif ( 'filter' == $args['type'] ) {
+				?>
+				<span class="ash-hook-type ash-hook-type">F</span>
+				<?php
+			}
+			// Main - Write the action hook name.
+			// echo esc_html( $args['ID'] );
+			echo esc_attr( $args['ID'] );
+			// Write the count number if any function are hooked.
+			if ( $nested_hooks_count ) {
+				?>
+				<span class="ash-hook-count">
+					<?php echo esc_attr( $nested_hooks_count ); ?>
+				</span>
+				<?php
+			}
+			// Write out list of all the function hooked to an action.
+			if ( isset( $wp_filter[ $args['ID'] ] ) ) :
+				$nested_hooks = $wp_filter[ $args['ID'] ];
+				if ( $nested_hooks ) :
+					?>
+					<ul class="ash-hook-dropdown">
+						<li class="ash-hook-heading">
+							<?php
+								$type = ucwords( esc_attr( $args['type'] ) );
+								$id   = esc_attr( $args['ID'] );
+								$url  = "https://codex.wordpress.org/Plugin_API/{$type}_Reference/{$id}";
+								echo "<strong>{$type}:</strong> <a href='{$url}' target='_blank'>{$id}</a>";
+							?>
+						</li>
+						<?php
+						foreach ( $nested_hooks as $nested_key => $nested_value ) :
+							// Show the priority number if the following hooked functions
+							?>
+							<li class="ash-priority">
+								<span class="ash-priority-label"><strong><?php echo esc_html( 'Priority:' ); /* _e('Priority', 'another-show-hooks') */ ?></strong> <?php echo esc_attr( $nested_key ); ?></span>
+							</li>
+							<?php
+							foreach ( $nested_value as $nested_inner_key => $nested_inner_value ) :
+								// Show all teh functions hooked to this priority of this hook
+								?>
+								<li>
+									<?php
+									if ( $nested_inner_value['function'] && is_array( $nested_inner_value['function'] ) && count( $nested_inner_value['function'] ) > 1 ) :
+
+										// Hooked function ( of type object->method() )
+										?>
+										<span class="ash-function-string">
+											<?php
+											$classname = false;
+											if ( is_object( $nested_inner_value['function'][0] ) || is_string( $nested_inner_value['function'][0] ) ) {
+												if ( is_object( $nested_inner_value['function'][0] ) ) {
+													$classname = get_class( $nested_inner_value['function'][0] );
+												}
+												if ( is_string( $nested_inner_value['function'][0] ) ) {
+													$classname = $nested_inner_value['function'][0];
+												}
+												if ( $classname ) {
+													?>
+													<?php echo esc_attr( $classname ); ?>&ndash;&gt;
+													<?php
+												}
+											}
+											?>
+											<?php echo esc_attr( $nested_inner_value['function'][1] ); ?>
+										</span>
+										<?php
+									else :
+										// Hooked function ( of type function() )
+										?>
+										<span class="ash-function-string">
+											<?php echo esc_attr( $nested_inner_key ); ?>
+										</span>
+										<?php
+									endif;
+									?>
+								</li>
+								<?php
+							endforeach;
+						endforeach;
+						?>
+					</ul>
+					<?php
+				endif;
+			endif;
+			?>
+		</span>
+		<?php
+	}
+
+	/*
+	 * Filter Hooks Panel
+	 */
+	function filter_hooks_panel() {
+
+		if ( $this->status !== 'show-filter-hooks' ) {
+			return;
+		}
+
+		global $wp_filter, $wp_actions;
+		?>
+
+		<div  id="ash-dragable-hook-panel" class="ash-nested-hooks-block <?php echo ( 'show-filter-hooks' == $this->status ) ? esc_html( 'ash-active' ) : ''; ?> ">
+			<div class="ash-show-hooks-icon-test">
+				<!-- <i class="la la-exchange"></i> -->
+				<span class="dashicons dashicons-leftright"></span>
+			</div>
+			<div class="ash-show-hooks-sub-div">
+				<div class="ash-show-move-window">
+					<span class="ash-show-move-text" aria-hidden="true"><span class="dashicons dashicons-move"></span> Move Window</span>
+				</div>
+				<?php
+				foreach ( $this->all_hooks as $va_nested_value ) {
+					if ( 'action' == $va_nested_value['type'] || 'filter' == $va_nested_value['type'] ) {
+						$this->render_action( $va_nested_value );
+					} else {
+						?>
+						<div class="ash-collection-divider">
+							<?php echo esc_attr( $va_nested_value['ID'] ); ?>
+						</div>
+						<?php
+					}
+				}
+				?>
+			</div>
+		</div>
+		<?php
+	}
+
+	function plugin_active() {
+		// Filters to deactivate our plugin - backend, frontend or sitewide.
+		// add_filter( 'ash_show_hooks_active', '__return_false' );
+		// add_filter( 'ash_show_hooks_backend_active', '__return_false' );
+		// add_filter( 'ash_show_hooks_frontend_active', '__return_false' );
+		if ( ! apply_filters( 'ash_show_hooks_active', true ) ) {
+			// Sitewide.
+			return false;
+		}
+		if ( is_admin() ) {
+			// Backend.
+			if ( ! apply_filters( 'ash_show_hooks_backend_active', true ) ) {
+				return false;
+			}
+		} else {
+			// Frontend.
+			if ( ! apply_filters( 'ash_show_hooks_frontend_active', true ) ) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
+Another_Show_Hooks::get_instance();

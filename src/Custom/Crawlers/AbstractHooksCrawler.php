@@ -23,6 +23,11 @@ abstract class AbstractHooksCrawler {
 		$this->all_hooks = [];
 	}
 
+	public function set_state( State $state ) : void {
+		$state->set_crawler( $this );
+		$this->state = $state;
+	}
+
 	/**
 	 * Relies the crawling to the current state.
 	 *
@@ -36,11 +41,8 @@ abstract class AbstractHooksCrawler {
 	 * Add a hook to the list of hooks to be crawled based on the crawler rules.
 	 *
 	 * @param string $hook The name of the hook.
+	 *
+	 * @return array|null The hook added or null if the hook was not added.
 	 */
-	abstract public function add_hook( string $hook ) : void;
-
-	public function set_state( State $state ) : void {
-		$state->set_crawler( $this );
-		$this->state = $state;
-	}
+	abstract public function add_hook( string $hook ) : ?array;
 }

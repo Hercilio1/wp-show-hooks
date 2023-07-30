@@ -7,15 +7,21 @@
 
 namespace WPShowHooks\Custom\StatesManager;
 
+use WPShowHooks\Custom\Renderers\ActionRenderer;
+
 /**
  * Class Rendering. When the crawling system is active and rendering hooks.
  */
 class Rendering extends State {
 
 	public function crawl( string $hook ) : void {
+		$current_hook = $this->crawler->add_hook( $hook );
+		if ( $current_hook ) {
+			ActionRenderer::render( $current_hook );
+		}
 	}
 
-	public function get_status(): string {
+	public function get_status() : string {
 		return 'rendering';
 	}
 }

@@ -20,7 +20,7 @@ class Enqueue {
 		add_action( 'login_enqueue_scripts', [ __CLASS__, 'enqueue_script' ] );
 	}
 
-	public function enqueue_script() {
+	public static function enqueue_script() {
 		// Main Styles.
 		wp_register_style( 'ash-main-css', WP_SHOW_HOOKS_URL . 'assets/css/ash-main.css', [], WP_DEBUG ?? time(), 'screen' );
 		wp_enqueue_style( 'ash-main-css' );
