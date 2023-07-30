@@ -14,10 +14,15 @@ class Init {
 
 	public static function init() : void {
 		self::setup();
-		Custom\HooksReader::get_instance();
+
+		add_action( 'plugins_loaded', [ __CLASS__, 'read_hooks' ] );
 	}
 
 	public static function setup() : void {
 		Setup\Enqueue::init();
+	}
+
+	public static function read_hooks() : void {
+		Custom\HooksReader::get_instance();
 	}
 }

@@ -15,16 +15,21 @@ class ActionsCrawler extends AbstractHooksCrawler {
 	public function add_hook( string $hook ) : ?array {
 		global $wp_actions;
 		// Check if it is an action.
-		if ( isset( $wp_actions[ $hook ] ) ) {
-			$hook_cell         = [
-				'ID'       => $hook,
-				'callback' => false,
-				'type'     => 'action',
-			];
-			$this->all_hooks[] = $hook_cell;
-			return $hook_cell;
+		if ( ! isset( $wp_actions[ $hook ] ) ) {
+			return null;
 		}
+		$hook_cell = [
+			'ID'       => $hook,
+			'callback' => false,
+			'type'     => 'action',
+		];
+
+		if ( ! $this->is_a_valid_hook( $hook_cell ) ) {
+			return null;
+		}
+		$this->all_hooks[] = $hook_cell;
+
 		// TODO: Add recent hook algorithm.
-		return null;
+		return $hook_cell;
 	}
 }
