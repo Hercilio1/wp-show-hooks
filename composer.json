@@ -34,8 +34,8 @@
 		}
 	},
 	"scripts": {
-		"fix-style": "phpcbf -p --standard=phpcs.xml.dist seox-plugin-publishers-child.php src/",
-		"check-style": "phpcs -p --standard=phpcs.xml.dist seox-plugin-publishers-child.php src/",
+		"fix-style": "phpcbf -p --standard=phpcs.xml.dist wp-show-hooks.php src/",
+		"check-style": "phpcs -p --standard=phpcs.xml.dist wp-show-hooks.php src/",
 		"check": [
 			"@fix-style",
 			"@check-style"

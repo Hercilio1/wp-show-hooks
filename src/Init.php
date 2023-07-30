@@ -13,5 +13,10 @@ namespace WPShowHooks;
 class Init {
 
 	public static function init() : void {
+		Custom\HooksReader::get_instance();
+	}
+
+	public static function setup() : void {
+		Setup\Enqueue::init();
 	}
 }

@@ -22,25 +22,27 @@
 defined( 'ABSPATH' ) || exit();
 
 if ( ! defined( 'WP_SHOW_HOOKS_VERSION' ) ) {
-    define( 'WP_SHOW_HOOKS_VERSION', '0.1.0' );
+	define( 'WP_SHOW_HOOKS_VERSION', '0.1.0' );
 }
 
 if ( ! defined( 'WP_SHOW_HOOKS_FILE' ) ) {
-    define( 'WP_SHOW_HOOKS_FILE', __FILE__ );
+	define( 'WP_SHOW_HOOKS_FILE', __FILE__ );
 }
 
 if ( ! defined( 'WP_SHOW_HOOKS_PATH' ) ) {
-    define( 'WP_SHOW_HOOKS_PATH', plugin_dir_path( __FILE__ ) );
+	define( 'WP_SHOW_HOOKS_PATH', plugin_dir_path( __FILE__ ) );
 }
 
 if ( ! defined( 'WP_SHOW_HOOKS_URL' ) ) {
-    define( 'WP_SHOW_HOOKS_URL', plugin_dir_url( __FILE__ ) );
+	define( 'WP_SHOW_HOOKS_URL', plugin_dir_url( __FILE__ ) );
 }
 
+// phpcs:ignore PHPCS_SecurityAudit.BadFunctions.FilesystemFunctions.WarnFilesystem
 if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' ) ) {
-    require_once dirname( __FILE__ ) . '/vendor/autoload.php';
+	// phpcs:ignore PHPCS_SecurityAudit.BadFunctions.FilesystemFunctions.WarnFilesystem
+	require_once dirname( __FILE__ ) . '/vendor/autoload.php';
 }
 
-if ( class_exists( '\\WPShowHooks\\\\Init' ) ) {
-    WPShowHooks\Init::init();
+if ( class_exists( '\\WPShowHooks\\Init' ) ) {
+	WPShowHooks\Init::init();
 }
