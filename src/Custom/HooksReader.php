@@ -9,8 +9,8 @@ namespace WPShowHooks\Custom;
 
 use WPShowHooks\Custom\Crawlers\AbstractHooksCrawler;
 use WPShowHooks\Custom\Crawlers\ActionsCrawler;
-use WPShowHooks\Custom\StatesManager\Crawling;
-use WPShowHooks\Custom\StatesManager\Rendering;
+use WPShowHooks\Custom\Crawlers\StatesManager\Crawling;
+use WPShowHooks\Custom\Crawlers\StatesManager\Rendering;
 
 /**
  * Class HooksReader. Hooks all hooks of the system and delegates the right action.

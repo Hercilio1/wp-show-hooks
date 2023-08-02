@@ -19,7 +19,7 @@ class ActionRenderer {
 		// Count the number of functions on this hook.
 		$nested_hooks_count = 0;
 		if ( $nested_hooks ) {
-			foreach ( $nested_hooks as $key => $value ) {
+			foreach ( $nested_hooks as $value ) {
 				$nested_hooks_count += count( $value );
 			}
 		}

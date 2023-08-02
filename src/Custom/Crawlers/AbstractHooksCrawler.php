@@ -7,10 +7,9 @@
 
 namespace WPShowHooks\Custom\Crawlers;
 
-use WPShowHooks\Custom\Crawlers\CrawlingRules\CrawlingRule;
 use WPShowHooks\Custom\Crawlers\CrawlingRules\IgnoringPrefixes;
-use WPShowHooks\Custom\StatesManager\Inactive;
-use WPShowHooks\Custom\StatesManager\State;
+use WPShowHooks\Custom\Crawlers\StatesManager\Inactive;
+use WPShowHooks\Custom\Crawlers\StatesManager\State;
 
 /**
  * Abstract class AbstractHooksCrawler. Define a general crawler for any kind of hook.

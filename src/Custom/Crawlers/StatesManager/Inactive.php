@@ -5,7 +5,7 @@
  * @package WP_Show_Hooks
  */
 
-namespace WPShowHooks\Custom\StatesManager;
+namespace WPShowHooks\Custom\Crawlers\StatesManager;
 
 /**
  * Class Inactive. When the crawling system is inactive.

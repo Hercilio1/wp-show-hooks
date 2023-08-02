@@ -5,7 +5,7 @@
  * @package WP_Show_Hooks
  */
 
-namespace WPShowHooks\Custom\StatesManager;
+namespace WPShowHooks\Custom\Crawlers\StatesManager;
 
 /**
  * Class Crawling. When the crawling system is active but the hooks are only being crawled.
