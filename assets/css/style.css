@@ -1,0 +1,92 @@
+/* Reset structure */
+#wp-show-hooks * {
+    all: initial;
+	font-family: monospace;
+	font-weight: normal;
+}
+
+#wp-show-hooks p {
+	font-size: 16px;
+	line-height: 1.5;
+	margin-bottom: 1em;
+}
+
+#wp-show-hooks ul, ol {
+	margin-left: 20px;
+}
+
+#wp-show-hooks li {
+	display: list-item;
+}
+
+/* Styles for the sidebar modal container */
+#wp-show-hooks {
+    display: none;
+    position: fixed;
+    z-index: 999999999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Styles for the sidebar modal */
+#wp-show-hooks .sidebar-modal {
+    background-color: #f9f9f9;
+    height: 100%;
+    width: 40%;
+    position: fixed;
+    top: 0;
+    right: -40%;
+    transition: right 0.3s ease;
+}
+
+/* Close button styles */
+#wp-show-hooks .close {
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Heading styles */
+#wp-show-hooks .heading {
+	background-color: #efefef;
+	border-bottom: 1px solid #ccc;
+	margin: 0;
+	padding: 10px;
+	display: block;
+}
+
+#wp-show-hooks .section-title {
+	font-size: 24px;
+	font-weight: bold;
+}
+
+/* Items list styles */
+#wp-show-hooks .hooks-list {
+	counter-reset: gradient-counter;
+	list-style: none;
+	margin: 1.75rem 0;
+	padding-left: 1rem;
+}
+
+#wp-show-hooks .hooks-list > li {
+	background: white;
+	border-radius: 0.5rem;
+	box-shadow: 0.25rem 0.25rem 0.6rem rgba(0,0,0,0.05), 0 0.5rem 1.125rem rgba(75,0,0,0.05);;
+	counter-increment: gradient-counter;
+	margin: 0.5rem 0.5rem 0 0.5rem;
+	padding: 1rem;
+	position: relative;
+}
+
+#wp-show-hooks .hooks-list li:hover {
+    background-color: #f2f2f2;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+	/* Custom styles for smaller screens */
+}

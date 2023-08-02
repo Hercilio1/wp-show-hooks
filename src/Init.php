@@ -29,5 +29,6 @@ class Init {
 		}
 		Setup\Enqueue::init();
 		Custom\HooksReader::get_instance();
+		Custom\HooksDictionary\ActionsDictionary::init();
 	}
 }

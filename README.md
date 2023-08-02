@@ -12,6 +12,7 @@
 	3. It should allow to filter hooks by a search input.
 	4. It lists the ignored hooks on the sidebar, differentiating the hook cell layout. 
 
+- [ ] Panel for ignoring hooks
+
+
 - [ ] Crawl and show filters.
-
-
