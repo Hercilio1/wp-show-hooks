@@ -1,0 +1,8 @@
+@import "global/modal-ux";
+
+#wp-show-hooks {
+	@import "base/reset";
+	@import "components/workspace";
+	@import "components/modal";
+	@import "components/hooks-list";
+}

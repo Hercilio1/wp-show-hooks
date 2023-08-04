@@ -33,6 +33,10 @@ abstract class AbstractHooksCrawler {
 		$this->state = $state;
 	}
 
+	public function get_all_hooks() : array {
+		return $this->all_hooks;
+	}
+
 	public function is_a_valid_hook( array $hook ) : bool {
 		foreach ( $this->crawling_rules as  $rule ) {
 			if ( ! $rule->is_valid( $hook ) ) {

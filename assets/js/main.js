@@ -1,12 +1,14 @@
 // Function to open the sidebar modal
 function openModal() {
-	document.querySelector("#wp-show-hooks").style.display = "block";
+	document.querySelector("body").classList.add("wp-show-hooks-sidebar-opened");
+	document.querySelector("#wp-show-hooks .workspace").style.display = "block";
 	document.querySelector("#wp-show-hooks .sidebar-modal").style.right = "0";
 }
 
 // Function to close the sidebar modal
 function closeModal() {
-	document.querySelector("#wp-show-hooks").style.display = "none";
+	document.querySelector("body").classList.remove("wp-show-hooks-sidebar-opened");
+	document.querySelector("#wp-show-hooks .workspace").style.display = "none";
 	document.querySelector("#wp-show-hooks .sidebar-modal").style.right = "-250px";
 }
 

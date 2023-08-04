@@ -1,0 +1,55 @@
+{
+  "name": "wp-show-hooks",
+  "description": "Show all triggered hooks fired on the current WordPress page.",
+  "author": "Hercílio M. Ortiz",
+  "keywords": [
+    "WordPress",
+    "Plugin"
+  ],
+  "files": [
+    "assets/dev/**/*"
+  ],
+  "homepage": "https://github.com/Hercilio1/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hercilio1/wp-show-hooks"
+  },
+  "scripts": {
+    "js:dev": "webpack --config assets/dev/js/webpack.config.js --watch",
+    "js:build": "webpack --config assets/dev/js/webpack.prod.js",
+    "js:check": "eslint 'assets/dev/js/**/*.js'",
+    "js:fix": "eslint 'assets/dev/js/**/*.js' --fix",
+    "sass:dev": "webpack --config assets/dev/sass/webpack.config.js --watch",
+    "sass:build": "webpack --config assets/dev/sass/webpack.prod.js ",
+    "sass:lint:fix": "npx stylelint 'assets/dev/sass/**/*.scss' --fix",
+    "sass:lint:check": "npx stylelint 'assets/dev/sass/**/*.scss'"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.5",
+    "@babel/eslint-parser": "^7.19.1",
+    "@babel/preset-env": "^7.16.11",
+    "@wordpress/eslint-plugin": "^11.1.0",
+    "autoprefixer": "^10.4.13",
+    "babel-loader": "^8.2.3",
+    "css-loader": "^6.7.1",
+    "dir-archiver": "^1.1.1",
+    "eslint": "^8.11.0",
+    "eslint-config-prettier": "^8.4.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "glob": "^7.2.0",
+    "mini-css-extract-plugin": "^2.6.0",
+    "postcss": "^8.4.19",
+    "postcss-loader": "^7.0.2",
+    "postcss-scss": "^4.0.4",
+    "prettier": "^2.5.1",
+    "sass": "^1.51.0",
+    "sass-loader": "^13.0.0",
+    "style-loader": "^3.3.1",
+    "stylelint": "^14.5.3",
+    "stylelint-config-standard": "^25.0.0",
+    "stylelint-scss": "^4.1.0",
+    "webpack": "^5.66.0",
+    "webpack-cli": "4.9.2",
+    "webpack-remove-empty-scripts": "^0.8.0"
+  }
+}

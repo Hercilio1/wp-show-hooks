@@ -2,7 +2,7 @@
 # editorconfig.org
 
 # WordPress Coding Standards
-# http://make.wordpress.org/core/handbook/coding-standards/
+# https://make.wordpress.org/core/handbook/coding-standards/
 
 root = true
 
@@ -12,18 +12,35 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 indent_style = tab
+indent_size = 4
+
+[*.php]
+indent_style = tab
+indent_size = 4
+insert_final_newline = true
+
+[*.{js,json}]
+indent_style = tab
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = false
+insert_final_newline = false
+
+[*.{scss,sass}]
+indent_style = tab
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = false
+insert_final_newline = false
 
 [*.yml]
 indent_style = space
 indent_size = 2
 
-[*{.xml,.xml.dist}]
-indent_style = space
-indent_size = 2
-
-[*.{js,json}]
-indent_style = tab
-indent_size = 2
-
 [*.md]
 trim_trailing_whitespace = false
+
+[{*.txt,wp-config-sample.php}]
+end_of_line = crlf

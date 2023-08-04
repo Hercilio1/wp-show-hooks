@@ -22,7 +22,7 @@ class Enqueue {
 
 	public static function enqueue_script() {
 		// Main Styles.
-		wp_enqueue_style( 'wp-show-hooks', WP_SHOW_HOOKS_URL . 'assets/css/style.css', [], WP_DEBUG ?? time(), 'screen' );
+		wp_enqueue_style( 'wp-show-hooks', WP_SHOW_HOOKS_URL . 'assets/css/dist/style.css', [], WP_DEBUG ?? time(), 'screen' );
 		wp_enqueue_style( 'ash-main-css', WP_SHOW_HOOKS_URL . 'assets/css/ash-main.css', [], WP_DEBUG ?? time(), 'screen' );
 		// Main Scripts.
 		wp_enqueue_script( 'wp-show-hooks', WP_SHOW_HOOKS_URL . 'assets/js/main.js', [ 'jquery' ], WP_DEBUG ?? time(), true );

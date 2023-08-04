@@ -1,0 +1,23 @@
+.hooks-list {
+	counter-reset: gradient-counter;
+	list-style: none;
+	margin: 1rem 0;
+	padding-left: 0.5rem;
+	overflow: auto;
+}
+
+.hooks-list > li {
+	list-style-type: none;
+	background: white;
+	border-radius: 0.5rem;
+	box-shadow: 0.25rem 0.25rem 0.6rem rgb(0 0 0 / 5%), 0 0.5rem 1.125rem rgb(75 0 0 / 5%);
+	counter-increment: gradient-counter;
+	margin: 0.5rem 0.5rem 0;
+	padding: 0.7rem;
+	position: relative;
+	word-wrap: break-word;
+}
+
+.hooks-list li:hover {
+	background-color: #f2f2f2;
+}

@@ -32,7 +32,7 @@ final class HooksReader {
 		// TODO: Dinamize.
 		$crawler = new ActionsCrawler();
 		$crawler->set_state( new Crawling() );
-		$this->add_crawler( $crawler );
+		$this->add_crawler( 'action', $crawler );
 		// --
 		$this->intercept_hooks();
 	}
@@ -55,13 +55,12 @@ final class HooksReader {
 		}
 	}
 
-	/**
-	 * Adds a new crawler to the system.
-	 *
-	 * @param AbstractHooksCrawler $crawler The crawler to be added.
-	 */
-	public function add_crawler( AbstractHooksCrawler $crawler ) : void {
-		$this->all_crawlers[] = $crawler;
+	public function add_crawler( string $key, AbstractHooksCrawler $crawler ) : void {
+		$this->all_crawlers[ $key ] = $crawler;
+	}
+
+	public function get_crawler( string $key ) : ?AbstractHooksCrawler {
+		return isset( $this->all_crawlers[ $key ] ) ? $this->all_crawlers[ $key ] : null;
 	}
 
 	public function tmp_active_rendering() : void {
