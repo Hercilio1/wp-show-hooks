@@ -50,20 +50,23 @@ class ActionRenderer {
 				<?php
 			}
 			// Write out list of all the function hooked to an action.
-			if ( isset( $wp_filter[ $hook['ID'] ] ) ) :
-				$nested_hooks = $wp_filter[ $hook['ID'] ];
-				if ( $nested_hooks ) :
+			?>
+			<div class="wpsh-hook-dropdown">
+				<div class="wpsh-hook-dropdown-offset"></div>
+				<div class="wpsh-hook-dropdown-heading">
+					<?php
+						$type = ucwords( esc_attr( $hook['type'] ) );
+						$id   = esc_attr( $hook['ID'] );
+						// TODO: Mover para outro lugar.
+						$url = "https://codex.wordpress.org/Plugin_API/{$type}_Reference/{$id}";
+						echo wp_kses_post( "<strong>{$type}:</strong> {$id}" );
 					?>
-					<div class="wpsh-hook-dropdown">
-						<div class="wpsh-hook-dropdown-offset"></div>
-						<div class="wpsh-hook-dropdown-heading">
-							<?php
-								$type = ucwords( esc_attr( $hook['type'] ) );
-								$id   = esc_attr( $hook['ID'] );
-								$url  = "https://codex.wordpress.org/Plugin_API/{$type}_Reference/{$id}";
-								echo wp_kses_post( "<strong>{$type}:</strong> <a href='{$url}' target='_blank'>{$id}</a>" );
-							?>
-						</div>
+				</div>
+				<?php
+				if ( isset( $wp_filter[ $hook['ID'] ] ) ) :
+					$nested_hooks = $wp_filter[ $hook['ID'] ];
+					if ( $nested_hooks ) :
+						?>
 						<ul class="wpsh-hook-dropdown-body">
 							<?php foreach ( $nested_hooks as $nested_key => $nested_value ) : ?>
 								<?php // Show the priority number if the following hooked functions. ?>
@@ -110,9 +113,9 @@ class ActionRenderer {
 								<?php endforeach; ?>
 							<?php endforeach; ?>
 						</ul>
-					</div>
+					<?php endif; ?>
 				<?php endif; ?>
-			<?php endif; ?>
+			</div>
 		</span>
 		<?php
 	}
