@@ -17,7 +17,7 @@ list(
 ?>
 
 <div id="wp-show-hooks">
-	<div class="workspace">
+	<div class="container-modal">
 		<div class="sidebar-modal">
 			<div class="heading">
 				<p class="section-title">Hooks list</p>

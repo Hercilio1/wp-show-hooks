@@ -32,7 +32,7 @@ class AdminBar {
 		if ( 'show-action' === $status ) {
 			$title = __( 'Stop Showing Action Hooks', 'another-show-hooks' );
 			$href  = $deactivation_url;
-			$css   = 'ash-hooks-on ash-hooks-normal';
+			$css   = 'wpsh-hooks-on wpsh-hooks-normal';
 		} else {
 			$title = __( 'Show Action Hooks', 'another-show-hooks' );
 			$href  = $activation_manager->get_activation_url( 'show-action' );
@@ -51,7 +51,7 @@ class AdminBar {
 		$wp_admin_bar->add_menu(
 			[
 				'title'  => '<span class="ab-icon"></span><span class="ab-label">' . $menu_title . '</span>',
-				'id'     => 'ash-main-menu',
+				'id'     => 'wpsh-main-menu',
 				'parent' => false,
 				'href'   => $href,
 			]
@@ -59,8 +59,8 @@ class AdminBar {
 		$wp_admin_bar->add_menu(
 			[
 				'title'  => $title,
-				'id'     => 'ash-simply-show-hooks',
-				'parent' => 'ash-main-menu',
+				'id'     => 'wpsh-simply-show-hooks',
+				'parent' => 'wpsh-main-menu',
 				'href'   => $href,
 				'meta'   => [ 'class' => $css ],
 			]
@@ -68,7 +68,7 @@ class AdminBar {
 		if ( 'show-filter' === $status ) {
 			$title = __( 'Stop Showing Action & Filter Hooks', 'another-show-hooks' );
 			$href  = $deactivation_url;
-			$css   = 'ash-hooks-on ash-hooks-sidebar';
+			$css   = 'wpsh-hooks-on wpsh-hooks-sidebar';
 		} else {
 			$title = __( 'Show Act  ion & Filter Hooks', 'another-show-hooks' );
 			$href  = $activation_manager->get_activation_url( 'show-filter' );
@@ -78,8 +78,8 @@ class AdminBar {
 		$wp_admin_bar->add_menu(
 			[
 				'title'  => $title,
-				'id'     => 'ash-show-all-hooks',
-				'parent' => 'ash-main-menu',
+				'id'     => 'wpsh-show-all-hooks',
+				'parent' => 'wpsh-main-menu',
 				'href'   => $href,
 				'meta'   => [ 'class' => $css ],
 			]
@@ -92,7 +92,7 @@ class AdminBar {
 	public static function add_builder_edit_button_css() : void {
 		?>
 		<style>
-		#wp-admin-bar-ash-main-menu .ab-icon:before{
+		#wp-admin-bar-wpsh-main-menu .ab-icon:before{
 			font-family: "dashicons" !important;
 			content: "\f323" !important;
 			font-size: 16px !important;

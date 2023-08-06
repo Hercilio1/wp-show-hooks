@@ -1,25 +1,25 @@
 jQuery( function($){
 	// show hide the hook flotting window
-	$(".ash-show-hooks-icon-test").click(function(){
-		$(".ash-nested-hooks-block").toggleClass("ash_show");
-		$(".ash-nested-hooks-block").addClass("ash_transition_fix");
-		$(".ash-nested-hooks-block").toggleClass("ash_slider-fix");
-		$(".ash-show-hooks-icon-test").toggleClass("ash_icon-fix");
+	$(".wpsh-show-hooks-icon-test").click(function(){
+		$(".wpsh-nested-hooks-block").toggleClass("wpsh_show");
+		$(".wpsh-nested-hooks-block").addClass("wpsh_transition_fix");
+		$(".wpsh-nested-hooks-block").toggleClass("wpsh_slider-fix");
+		$(".wpsh-show-hooks-icon-test").toggleClass("wpsh_icon-fix");
 	  });
 
-	$(".ash-show-move-window").mouseover(function(){
-		$("#ash-dragable-hook-panel").removeClass("ash_transition_fix");
+	$(".wpsh-show-move-window").mouseover(function(){
+		$("#wpsh-dragable-hook-panel").removeClass("wpsh_transition_fix");
 	  });
 
 	$("#disable_callback_function").click(function(){
-		$(".ash-tab-box-div").toggleClass("ash_padding_fix");
+		$(".wpsh-tab-box-div").toggleClass("wpsh_padding_fix");
 	});
 
 
-    const wrapper = document.querySelector("#ash-dragable-hook-panel");
+    const wrapper = document.querySelector("#wpsh-dragable-hook-panel");
     var header = '';
     if( wrapper !== null ) {
-      header = wrapper.querySelector(".ash-show-move-window");
+      header = wrapper.querySelector(".wpsh-show-move-window");
     }
 
     function onDrag({movementX, movementY}){
@@ -32,12 +32,12 @@ jQuery( function($){
 
     if( header ) {
       header.addEventListener("mousedown", ()=>{
-        header.classList.add("ash_active");
+        header.classList.add("wpsh_active");
         header.addEventListener("mousemove", onDrag);
       });
   
       document.addEventListener("mouseup", ()=>{
-        header.classList.remove("ash_active");
+        header.classList.remove("wpsh_active");
         header.removeEventListener("mousemove", onDrag);
       });
     }

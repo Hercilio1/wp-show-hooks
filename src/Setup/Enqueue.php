@@ -23,13 +23,13 @@ class Enqueue {
 	public static function enqueue_script() {
 		// Main Styles.
 		wp_enqueue_style( 'wp-show-hooks', WP_SHOW_HOOKS_URL . 'assets/css/dist/style.css', [], WP_DEBUG ?? time(), 'screen' );
-		wp_enqueue_style( 'ash-main-css', WP_SHOW_HOOKS_URL . 'assets/css/ash-main.css', [], WP_DEBUG ?? time(), 'screen' );
+		wp_enqueue_style( 'wpsh-main-css', WP_SHOW_HOOKS_URL . 'assets/css/wpsh-main.css', [], WP_DEBUG ?? time(), 'screen' );
 		// Main Scripts.
 		wp_enqueue_script( 'wp-show-hooks', WP_SHOW_HOOKS_URL . 'assets/js/main.js', [ 'jquery' ], WP_DEBUG ?? time(), true );
-		wp_enqueue_script( 'ash-main-js', WP_SHOW_HOOKS_URL . 'assets/js/ash-main.js', [ 'jquery' ], WP_DEBUG ?? time(), true );
+		wp_enqueue_script( 'wpsh-main-js', WP_SHOW_HOOKS_URL . 'assets/js/wpsh-main.js', [ 'jquery' ], WP_DEBUG ?? time(), true );
 		wp_localize_script(
-			'ash-main-js',
-			'ash_main_js',
+			'wpsh-main-js',
+			'wpsh_main_js',
 			[
 				'home_url'  => get_home_url(),
 				'admin_url' => admin_url(),

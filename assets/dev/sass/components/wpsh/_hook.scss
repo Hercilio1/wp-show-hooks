@@ -1,0 +1,306 @@
+.wpsh-hook {
+	position: relative;
+	clear: both;
+	width: auto;
+	float: none;
+	color: #eee;
+	min-width: 0px;
+	min-height: 0px;
+	box-shadow: none;
+	border-radius: 2px;
+	margin: 2px 0 2px 2px;
+	display: inline-flex !important;
+	height: auto;
+	padding: 1px 3px;
+	background: #424242;
+	transition: 0s;
+	box-sizing: initial;
+	white-space: nowrap;
+
+	* {
+		font-family: monospace;
+	}
+
+	&.wpsh-hook-action {
+		background: #d1e8e0;
+		color: #2e2e2e;
+		box-shadow: none;
+		border: 1px solid #c3d9d1;
+	}
+
+	&.wpsh-hook-filter {
+		background: #ffe8ea;
+		color: #3a2d2d;
+		box-shadow: none;
+		border: 1px solid rgb(248 216 218);
+	}
+
+	.wpsh-hook-container {
+		white-space: nowrap;
+		display: inline-flex;
+		width: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		align-items: center;
+	}
+
+	.wpsh-hook-type {
+		background: rgb(0 0 0 / 13%);
+		border-radius: 30px;
+		min-width: 11px;
+		line-height: 11px;
+		text-align: center;
+		color: rgb(8 8 8 / 90%);
+		font-size: 9px;
+		float: none;
+		margin-right: 2px;
+	}
+
+	&.wpsh-hook-action .wpsh-hook-type {
+		background: rgb(0 0 0 / 20%);
+		color: rgb(199 255 212 / 100%);
+	}
+
+	&.wpsh-hook-filter .wpsh-hook-type {
+		background: rgb(0 0 0 / 15%);
+		color: #f4e1e1;
+	}
+
+	.wpsh-hook-label {
+		text-decoration: none;
+		font-size: 11px;
+		font-weight: normal;
+		line-height: 15px;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+
+	&.wpsh-hook-action.wpsh-hook-has-hooks .wpsh-hook-type {
+		background: rgb(0 0 0 / 20%);
+		color: #4dcca8;
+	}
+
+	&.wpsh-hook-filter.wpsh-hook-has-hooks .wpsh-hook-type {
+		background: rgb(0 0 0 / 25%);
+		color: rgb(196 131 131 / 100%);
+	}
+
+	/* HAS HOOKS */
+	&.wpsh-hook-has-hooks {
+		cursor: pointer;
+	}
+
+	/* ACTION HOOK */
+	&.wpsh-hook-action.wpsh-hook-has-hooks {
+		background: #141415;
+		border: 1px solid #289c7c;
+		color: #f6f6f6;
+		box-shadow: none;
+
+		.wpsh-hook-label {
+			color: #f6f6f6;
+		}
+	}
+
+	/* FILTER HOOK */
+	&.wpsh-hook-filter.wpsh-hook-has-hooks {
+		background: #16698c;
+		box-shadow: none;
+		border: 1px solid #e4d8dd;
+		color: #fff;
+	}
+
+	/* HOOK COUNT */
+	.wpsh-hook-count {
+		font-size: 8px;
+		background: rgb(255 0 43 / 96%);
+		border-radius: 20px;
+		padding: 0px 3px;
+		box-shadow: 0 -1px 0 rgb(0 0 0 / 16%) inset, 0 1px 0 rgb(0 0 0 / 1%);
+		line-height: 15px;
+		position: relative;
+		top: -5px;
+		right: -8px;
+		width: auto;
+		text-align: center;
+		height: auto;
+		box-sizing: border-box;
+		color: rgb(255 255 255 / 95%);
+		text-shadow: 0 -1px 0 rgb(0 0 0 / 20%);
+		min-width: 12px;
+		z-index: 2;
+	}
+
+	/* HOOK DROP DOWN */
+	.wpsh-hook-dropdown {
+		position: absolute;
+		z-index: 999999999;
+		line-height: 12px;
+		display: none;
+		border-radius: 4px;
+		box-shadow: 0 3px 7px rgb(0 0 0 / 7%), 0 0 0 1px rgb(0 0 0 / 8%);
+		color: rgb(66 66 66);
+		font-size: 11px;
+		white-space: nowrap;
+		padding: 0px 10px 9px;
+		margin: 0px 0 0 -16px;
+		background: rgb(255 255 255);
+		overflow: visible;
+		top: 150%;
+		text-align: left;
+
+		&::after {
+			display: block;
+			content: "";
+			width: 0;
+			height: 0;
+			border-style: solid;
+			border-width: 6px;
+			border-color: transparent;
+			border-bottom-color: #fff;
+			border-top-width: 0;
+			position: absolute;
+			bottom: 100%;
+			left: 30px;
+			opacity: 1;
+		}
+
+		&::before {
+			display: block;
+			content: "";
+			width: 0;
+			height: 0;
+			border-style: solid;
+			border-width: 7px;
+			border-color: transparent;
+			border-bottom-color: rgb(0 0 0 / 29%);
+			border-top-width: 0;
+			position: absolute;
+			bottom: 100%;
+			margin-left: -1px;
+			left: 30px;
+		}
+
+		.wpsh-hook-dropdown-offset {
+			position: absolute;
+			top: -8px;
+			height: 8px;
+			width: 100%;
+		}
+
+		.wpsh-hook-dropdown-heading,
+		li {
+			display: block;
+			padding: 2px 0;
+			position: relative;
+			margin: 0;
+			clear: both;
+			width: auto;
+			float: none;
+		}
+
+		/* HOOK NAME */
+		.wpsh-hook-dropdown-heading {
+			background: rgb(231 231 231 / 46%);
+			margin: 10px 0 20px;
+			font-size: 13px;
+			padding: 9px 7px;
+			border: 1px solid rgb(228 228 228);
+			border-radius: 3px;
+		}
+
+		li span.wpsh-function-string {
+			position: relative;
+			width: auto;
+			float: none;
+			min-width: 0px;
+			min-height: 0px;
+			border: 1px solid rgb(228 228 228);
+			color: rgb(66 66 66);
+			text-decoration: none;
+			border-radius: 2px;
+			margin: 0;
+			font-size: 11px;
+			display: inline-block;
+			line-height: 15px;
+			height: auto;
+			padding: 1px 5px;
+			background: #f4f4f4;
+			transition: 0.5s;
+			white-space: nowrap;
+		}
+
+		li span::before {
+			display: none;
+		}
+
+		li span::after {
+			display: none;
+		}
+
+		/* HOOK PRIORITY */
+		li.wpsh-priority {
+			display: block;
+			height: 1px;
+			padding: 0;
+			margin: 18px 0 11px;
+			border-bottom: 1px dotted #ebebeb;
+		}
+
+		/* HOOK PRIORITY LABEL */
+		li span.wpsh-priority-label {
+			display: inline-block;
+			background: #fff;
+			border-radius: 50px;
+			line-height: 20px;
+			height: 16px;
+			font-size: 11px;
+			color: #474747;
+			padding: 0 5px 0 0;
+			margin: -2px 0 0;
+			position: relative;
+			top: -7px;
+			left: 0px;
+		}
+
+		li span.wpsh-priority-label::after {
+			content: "";
+		}
+
+		li span.wpsh-priority-label::before {
+			content: "";
+		}
+
+		li span.wpsh-priority-label strong {
+			font-weight: bold;
+		}
+
+		/* UNKNOWN */
+		li ul {
+			display: none;
+			box-shadow: 0 0 0 1px rgb(0 0 0 / 20%) inset, 0 2px 9px rgb(0 0 0 / 21%);
+			border-radius: 3px;
+			position: absolute;
+			background: white;
+			z-index: 100;
+			top: 100%;
+			margin-top: -1px;
+			left: 15px;
+			pointer-events: none;
+		}
+
+		li:hover ul {
+			display: block;
+		}
+	}
+
+	/* LABEL HOVER */
+	&:hover {
+		z-index: 9998;
+	}
+
+	&:hover .wpsh-hook-dropdown {
+		display: block;
+	}
+}

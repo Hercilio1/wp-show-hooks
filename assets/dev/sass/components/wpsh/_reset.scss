@@ -1,0 +1,7 @@
+.wpsh-hook {
+	all: initial;
+
+	* {
+		all: initial; /* Reset all styles in this class children */
+	}
+}
