@@ -23,11 +23,18 @@ list(
 				<p class="section-title">Hooks list</p>
 				<span class="close" id="closeModalBtn">&times;</span>
 			</div>
-			<ul class="hooks-list">
+			<div class="hooks-list">
 				<?php foreach ( $hooks_list as $hook ) : ?>
-					<li><?php echo esc_html( $hook['ID'] ); ?></li>
+					<div>
+						<span><?php echo esc_html( $hook['ID'] ); ?></span>
+						<ul class="hooks-details">
+							<?php foreach ( $hook['nested_hooks_data'] as $callbacks ) : ?>
+								<li><span><?php echo esc_html( $callbacks ); ?></span>
+							<?php endforeach; ?>
+						</ul>
+					</div>
 				<?php endforeach; ?>
-			</ul>
+			</div>
 		</div>
 	</div>
 </div>
